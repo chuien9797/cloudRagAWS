@@ -19,6 +19,26 @@ It is built as a full-stack capstone-style system rather than a single demo scri
 - Jump to cited PDF pages
 
 
+### Public Repo Note
+
+As this project is maintained as a public repository, it is not directly connected to the live AWS deployment. This repository is intended for code sharing, portfolio presentation, and documentation purposes only.
+
+The live deployment pipeline is managed separately in a secured private environment, such as a private repository, private GitHub Actions workflow, or protected CI/CD configuration.
+
+AWS deployment secrets, repository variables, and sensitive configuration values are intentionally not included in this public repository. To run your own deployment, you will need to set up your own AWS credentials, IAM permissions, and repository variables in your private environment.
+
+
+High-level AWS steps:
+
+1. build and push API image to ECR
+2. build and push frontend image to ECR
+3. store sensitive auth values in SSM Parameter Store
+4. register backend and frontend ECS task definitions
+5. deploy ECS services
+6. route them through an ALB
+7. keep PostgreSQL on RDS and uploads in S3
+
+
 ## Tech Stack
 
 ### Frontend
@@ -344,15 +364,7 @@ Deployment-related files:
 - [frontend/Dockerfile](frontend/Dockerfile)
 - [frontend/docker-entrypoint.sh](frontend/docker-entrypoint.sh)
 
-High-level AWS steps:
 
-1. build and push API image to ECR
-2. build and push frontend image to ECR
-3. store sensitive auth values in SSM Parameter Store
-4. register backend and frontend ECS task definitions
-5. deploy ECS services
-6. route them through an ALB
-7. keep PostgreSQL on RDS and uploads in S3
 
 ### Frontend runtime config
 
@@ -453,4 +465,3 @@ Many RAG demos stop at “upload a file and ask a question.” CloudRAG goes fur
 - where citations come from
 - how history is persisted
 - how the system behaves in a real cloud deployment
-

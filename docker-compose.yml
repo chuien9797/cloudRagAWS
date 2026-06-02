@@ -1,0 +1,104 @@
+version: "3.9"
+
+services:
+
+  api:
+    build: .
+    container_name: cloudrag_api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - ollama
+      - postgres
+    volumes:
+      - chroma_data:/app/chroma_db
+      - uploads_data:/app/uploads
+    environment:
+      - API_KEY=${API_KEY}
+      - AUTH_SECRET=${AUTH_SECRET}
+      - AUTH_ADMIN_EMAIL=${AUTH_ADMIN_EMAIL}
+      - AUTH_ADMIN_PASSWORD=${AUTH_ADMIN_PASSWORD}
+      - AUTH_ADMIN_NAME=${AUTH_ADMIN_NAME}
+      - AUTH_TOKEN_TTL_HOURS=${AUTH_TOKEN_TTL_HOURS}
+      - OLLAMA_URL=${OLLAMA_URL}
+      - OLLAMA_MODEL=${OLLAMA_MODEL}
+      - CHROMA_DIR=${CHROMA_DIR}
+      - ENV=${ENV}
+      - DEBUG=${DEBUG}
+      - DATABASE_URL=postgresql://cloudrag:cloudrag@postgres:5432/cloudrag
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=5)\""]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 480s
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_KEEP_ALIVE=10m
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: cloudrag_postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER:     cloudrag
+      POSTGRES_PASSWORD: cloudrag
+      POSTGRES_DB:       cloudrag
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cloudrag -d cloudrag"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  frontend:
+    image: node:20-alpine
+    container_name: cloudrag_frontend
+    working_dir: /app
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_PROXY_TARGET=http://host.docker.internal:8000
+      - VITE_API_BASE_URL=${VITE_API_BASE_URL:-}
+    command: sh -c "npm install && npm run dev -- --host"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  frontend_prod:
+    build:
+      context: ./frontend
+    container_name: cloudrag_frontend_prod
+    ports:
+      - "8080:80"
+    environment:
+      - API_BASE_URL=${FRONTEND_API_BASE_URL:-http://localhost:8000}
+    depends_on:
+      - api
+    restart: unless-stopped
+    profiles: ["production"]
+
+volumes:
+  chroma_data:
+  ollama_data:
+  postgres_data:
+  uploads_data:

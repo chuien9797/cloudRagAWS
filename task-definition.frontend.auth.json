@@ -1,0 +1,38 @@
+{
+    "family":  "cloudrag-frontend-task",
+    "networkMode":  "awsvpc",
+    "requiresCompatibilities":  [
+                                    "FARGATE"
+                                ],
+    "cpu":  "512",
+    "memory":  "1024",
+    "executionRoleArn":  "arn:aws:iam::047612973278:role/ecsTaskExecutionRole",
+    "taskRoleArn":  "arn:aws:iam::047612973278:role/ecsTaskExecutionRole",
+    "containerDefinitions":  [
+                                 {
+                                     "name":  "frontend",
+                                     "image":  "047612973278.dkr.ecr.eu-west-2.amazonaws.com/cloudrag-frontend:latest",
+                                     "portMappings":  [
+                                                          {
+                                                              "containerPort":  80,
+                                                              "protocol":  "tcp"
+                                                          }
+                                                      ],
+                                     "environment":  [
+                                                         {
+                                                             "value":  "",
+                                                             "name":  "API_BASE_URL"
+                                                         }
+                                                     ],
+                                     "logConfiguration":  {
+                                                              "logDriver":  "awslogs",
+                                                              "options":  {
+                                                                              "awslogs-group":  "/ecs/cloudrag-frontend",
+                                                                              "awslogs-region":  "eu-west-2",
+                                                                              "awslogs-stream-prefix":  "frontend"
+                                                                          }
+                                                          },
+                                     "essential":  true
+                                 }
+                             ]
+}

@@ -1,0 +1,28 @@
+{
+  "family": "cloudrag-frontend-task",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::<aws-account-id>:role/<ecs-execution-role>",
+  "taskRoleArn": "arn:aws:iam::<aws-account-id>:role/<ecs-task-role>",
+  "containerDefinitions": [
+    {
+      "name": "frontend",
+      "image": "<aws-account-id>.dkr.ecr.<aws-region>.amazonaws.com/cloudrag-frontend:latest",
+      "portMappings": [{ "containerPort": 80, "protocol": "tcp" }],
+      "environment": [
+        { "name": "API_BASE_URL", "value": "https://<api-domain-or-alb>" }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/cloudrag-frontend",
+          "awslogs-region": "<aws-region>",
+          "awslogs-stream-prefix": "frontend"
+        }
+      },
+      "essential": true
+    }
+  ]
+}

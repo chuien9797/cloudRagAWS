@@ -1,0 +1,47 @@
+# =====================
+# Python
+# =====================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swp
+
+# =====================
+# Virtual Environment
+# =====================
+venv/
+env/
+.env
+
+# =====================
+# VSCode
+# =====================
+.vscode/
+
+# =====================
+# OS
+# =====================
+.DS_Store
+Thumbs.db
+
+# =====================
+# Logs
+# =====================
+*.log
+api-log.txt
+api-ask-log.json
+ollama-log.json
+
+# =====================
+# Others
+# =====================
+*.sqlite3
+
+# =====================
+# Generated deployment artifacts
+# =====================
+current-cloudrag-task.json
+task-definition.backend.*.json
+task-definition.frontend.live.json
+task-definition.db-bootstrap.json

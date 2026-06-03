@@ -1,6 +1,6 @@
-# CloudRAG
+# CloudRagAWS
 
-CloudRAG is a document-grounded RAG application for enterprise-style question answering. Users can upload documents, ask questions against them, inspect source-backed answers, control document visibility, and review chat history with citations.
+CloudRagAWS is a document-grounded RAG application for enterprise-style question answering. Users can upload documents, ask questions against them, inspect source-backed answers, control document visibility, and review chat history with citations.
 
 It is built as a full-stack capstone-style system rather than a single demo script: React frontend, FastAPI backend, PostgreSQL metadata store, ChromaDB vector retrieval, and Ollama-based local model inference.
 
@@ -112,7 +112,7 @@ FastAPI API
 
 ## Authentication
 
-CloudRAG uses **login-based authentication**.
+CloudRagAWS uses **login-based authentication**.
 
 The auth flow is:
 
@@ -243,7 +243,7 @@ FRONTEND_API_BASE_URL=http://localhost:8000
 ### Development mode
 
 ```cmd
-cd /d C:\GitHub\cloudRag
+cd /d C:\GitHub\cloudRagAWS
 docker compose up -d --build
 ```
 
@@ -281,29 +281,8 @@ Rebuild after backend/frontend changes:
 ```cmd
 docker compose up -d --build api frontend
 ```
-
-### Production-style local frontend
-
-```cmd
-cd /d C:\GitHub\cloudRag
-docker compose --profile production up -d --build api frontend_prod
 ```
 
-Frontend:
-
-```text
-http://localhost:8080
-```
-
-## Useful Local Commands
-
-```cmd
-docker ps
-docker logs -f cloudrag_api
-docker logs -f cloudrag_frontend
-docker logs -f ollama
-docker logs -f cloudrag_postgres
-```
 
 ## API Examples
 
@@ -311,15 +290,6 @@ Login:
 
 ```cmd
 curl -X POST "http://localhost:8000/api/auth/login" -H "Content-Type: application/json" -d "{\"email\":\"admin@cloudrag.local\",\"password\":\"ChangeMe123!\"}"
-```
-
-Ask a question with a bearer token:
-
-```cmd
-curl -X POST "http://localhost:8000/api/ask/with-sources" ^
-  -H "Content-Type: application/json" ^
-  -H "Authorization: Bearer <access_token>" ^
-  -d "{\"question\":\"What dataset is used in this paper?\"}"
 ```
 
 ## Core Endpoints
@@ -341,7 +311,7 @@ curl -X POST "http://localhost:8000/api/ask/with-sources" ^
 
 ## AWS Deployment
 
-CloudRAG has already been deployed successfully on AWS in this project shape:
+CloudRagAWS has already been deployed successfully on AWS in this project shape:
 
 ```text
 Browser
@@ -381,7 +351,7 @@ window.__APP_CONFIG__ = {
 
 ## Answer Quality Notes
 
-CloudRAG supports more than plain extraction. The prompt router includes:
+CloudRagAWS supports more than plain extraction. The prompt router includes:
 
 - direct QA
 - document summaries
@@ -429,7 +399,7 @@ That said, answer quality is still sensitive to:
 ## Repository Structure
 
 ```text
-cloudRag/
+cloudRagAWS/
 ├── db/
 │   └── schema.sql
 ├── frontend/
@@ -458,7 +428,7 @@ cloudRag/
 
 ## Why This Project Matters
 
-Many RAG demos stop at “upload a file and ask a question.” CloudRAG goes further by bringing in product and systems concerns:
+Many RAG demos stop at “upload a file and ask a question.” CloudRagAWS goes further by bringing in product and systems concerns:
 
 - who can access which documents
 - how answers are verified

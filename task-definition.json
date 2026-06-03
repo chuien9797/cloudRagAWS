@@ -19,61 +19,65 @@
   ],
   "containerDefinitions": [
     {
-      "name": "api",
-      "image": "<aws-account-id>.dkr.ecr.<aws-region>.amazonaws.com/cloudrag-api:latest",
-      "portMappings": [{ "containerPort": 8000, "protocol": "tcp" }],
-      "environment": [
-        { "name": "OLLAMA_URL",   "value": "http://localhost:11434/api/generate" },
-        { "name": "OLLAMA_MODEL", "value": "qwen2:1.5b" },
-        { "name": "OLLAMA_KEEP_ALIVE", "value": "45m" },
-        { "name": "OLLAMA_NUM_THREAD", "value": "4" },
-        { "name": "OLLAMA_NUM_CTX", "value": "3072" },
-        { "name": "ASK_TOP_K", "value": "5" },
-        { "name": "ASK_MAX_QUERY_VARIANTS", "value": "3" },
-        { "name": "ASK_MAX_CONTEXT_WORDS", "value": "650" },
-        { "name": "ASK_FACTUAL_NUM_PREDICT", "value": "120" },
-        { "name": "ASK_ANALYTICAL_NUM_PREDICT", "value": "320" },
-        { "name": "ASK_GROUND_CITATIONS", "value": "true" },
-        { "name": "CHROMA_DIR",   "value": "/app/chroma_db" },
-        { "name": "ENV",          "value": "production" },
-        { "name": "DEBUG",        "value": "false" },
-        { "name": "S3_BUCKET",    "value": "cloudrag-uploads" },
-        { "name": "AUTH_ADMIN_EMAIL", "value": "admin@cloudrag.local" },
-        { "name": "AUTH_ADMIN_NAME", "value": "CloudRAG Admin" },
-        { "name": "AUTH_TOKEN_TTL_HOURS", "value": "12" }
-      ],
-      "secrets": [
-        {
-          "name": "API_KEY",
-          "valueFrom": "arn:aws:ssm:<aws-region>:<aws-account-id>:parameter/cloudrag/API_KEY"
-        },
-        {
-          "name": "AUTH_SECRET",
-          "valueFrom": "arn:aws:ssm:<aws-region>:<aws-account-id>:parameter/cloudrag/AUTH_SECRET"
-        },
-        {
-          "name": "AUTH_ADMIN_PASSWORD",
-          "valueFrom": "arn:aws:ssm:<aws-region>:<aws-account-id>:parameter/cloudrag/AUTH_ADMIN_PASSWORD"
-        }
-      ],
-      "mountPoints": [
-        {
-          "sourceVolume": "chroma-efs",
-          "containerPath": "/app/chroma_db",
-          "readOnly": false
-        }
-      ],
-      "logConfiguration": {
-        "logDriver": "awslogs",
-        "options": {
-          "awslogs-group": "/ecs/cloudrag",
-          "awslogs-region": "<aws-region>",
-          "awslogs-stream-prefix": "api"
-        }
-      },
-      "essential": true,
-      "dependsOn": [{ "containerName": "ollama", "condition": "START" }]
+  "name": "api",
+  "image": "<aws-account-id>.dkr.ecr.<aws-region>.amazonaws.com/cloudrag-api:latest",
+  "portMappings": [{ "containerPort": 8000, "protocol": "tcp" }],
+  "environment": [
+    { "name": "OLLAMA_URL", "value": "http://localhost:11434/api/generate" },
+    { "name": "OLLAMA_MODEL", "value": "qwen2:1.5b" },
+    { "name": "OLLAMA_KEEP_ALIVE", "value": "45m" },
+    { "name": "OLLAMA_NUM_THREAD", "value": "4" },
+    { "name": "OLLAMA_NUM_CTX", "value": "3072" },
+    { "name": "ASK_TOP_K", "value": "5" },
+    { "name": "ASK_MAX_QUERY_VARIANTS", "value": "3" },
+    { "name": "ASK_MAX_CONTEXT_WORDS", "value": "650" },
+    { "name": "ASK_FACTUAL_NUM_PREDICT", "value": "120" },
+    { "name": "ASK_ANALYTICAL_NUM_PREDICT", "value": "320" },
+    { "name": "ASK_GROUND_CITATIONS", "value": "true" },
+    { "name": "CHROMA_DIR", "value": "/app/chroma_db" },
+    { "name": "ENV", "value": "production" },
+    { "name": "DEBUG", "value": "false" },
+    { "name": "S3_BUCKET", "value": "cloudrag-uploads" },
+    { "name": "AUTH_ADMIN_EMAIL", "value": "admin@cloudrag.local" },
+    { "name": "AUTH_ADMIN_NAME", "value": "CloudRAG Admin" },
+    { "name": "AUTH_TOKEN_TTL_HOURS", "value": "12" }
+  ],
+  "secrets": [
+    {
+      "name": "API_KEY",
+      "valueFrom": "arn:aws:ssm:<aws-region>:<aws-account-id>:parameter/cloudrag/API_KEY"
     },
+    {
+      "name": "AUTH_SECRET",
+      "valueFrom": "arn:aws:ssm:<aws-region>:<aws-account-id>:parameter/cloudrag/AUTH_SECRET"
+    },
+    {
+      "name": "AUTH_ADMIN_PASSWORD",
+      "valueFrom": "arn:aws:ssm:<aws-region>:<aws-account-id>:parameter/cloudrag/AUTH_ADMIN_PASSWORD"
+    },
+    {
+      "name": "DATABASE_URL",
+      "valueFrom": "arn:aws:ssm:<aws-region>:<aws-account-id>:parameter/cloudrag/DATABASE_URL"
+    }
+  ],
+  "mountPoints": [
+    {
+      "sourceVolume": "chroma-efs",
+      "containerPath": "/app/chroma_db",
+      "readOnly": false
+    }
+  ],
+  "logConfiguration": {
+    "logDriver": "awslogs",
+    "options": {
+      "awslogs-group": "/ecs/cloudrag",
+      "awslogs-region": "<aws-region>",
+      "awslogs-stream-prefix": "api"
+    }
+  },
+  "essential": true,
+  "dependsOn": [{ "containerName": "ollama", "condition": "START" }]
+},
     {
       "name": "ollama",
       "image": "<aws-account-id>.dkr.ecr.<aws-region>.amazonaws.com/cloudrag-ollama:latest",

@@ -1,6 +1,6 @@
-# CloudRagAWS
+# CloudRag
 
-CloudRagAWS is a document-grounded RAG application for enterprise-style question answering. Users can upload documents, ask questions against them, inspect source-backed answers, control document visibility, and review chat history with citations.
+CloudRag is a document-grounded RAG application for enterprise-style question answering. Users can upload documents, ask questions against them, inspect source-backed answers, control document visibility, and review chat history with citations.
 
 It is built as a full-stack capstone-style system rather than a single demo script: React frontend, FastAPI backend, PostgreSQL metadata store, ChromaDB vector retrieval, and Ollama-based local model inference.
 
@@ -311,7 +311,7 @@ curl -X POST "http://localhost:8000/api/auth/login" -H "Content-Type: applicatio
 
 ## AWS Deployment
 
-CloudRagAWS has already been deployed successfully on AWS in this project shape:
+It has already been deployed successfully on AWS in this project shape:
 
 ```text
 Browser

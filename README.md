@@ -371,7 +371,6 @@ That said, answer quality is still sensitive to:
 - Ollama inference on AWS is still CPU-sensitive
 - answer quality for complex rankings and vague judgments can still vary
 - exact PDF coordinate-level highlighting is not implemented
-- source-to-claim grounding is improved but still not perfect
 - this is authenticated and deployable, but not yet a full multi-role enterprise security platform
 
 ## Project Maturity

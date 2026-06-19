@@ -44,6 +44,7 @@ High-level AWS steps:
 ### Frontend
 <img width="1911" height="1052" alt="image" src="https://github.com/user-attachments/assets/5ca92f2c-f313-4774-af53-aed0c1c564fe" />
 <img width="1000" height="494" alt="image" src="https://github.com/user-attachments/assets/6707794e-9872-484b-ac70-d9c73b176756" />
+
 - React
 - Vite
 - Lucide icons
